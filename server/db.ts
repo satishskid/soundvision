@@ -1,6 +1,6 @@
 import { eq, desc } from "drizzle-orm";
-import { drizzle } from "drizzle-orm/better-sqlite3";
-import Database from "better-sqlite3";
+import { drizzle } from "drizzle-orm/libsql";
+import { createClient } from "@libsql/client";
 import {
   InsertUser,
   users,
@@ -27,10 +27,16 @@ let _db: ReturnType<typeof drizzle> | null = null;
 export async function getDb() {
   if (!_db) {
     try {
-      const dbPath = process.env.DATABASE_URL || "./local.db";
-      const sqlite = new Database(dbPath);
-      _db = drizzle(sqlite);
-      console.log("[Database] Connected to SQLite:", dbPath);
+      const dbUrl = process.env.DATABASE_URL || "file:./local.db";
+      const authToken = process.env.TURSO_AUTH_TOKEN;
+      
+      const client = createClient({
+        url: dbUrl,
+        authToken: authToken,
+      });
+      
+      _db = drizzle(client);
+      console.log("[Database] Connected to Turso:", dbUrl);
     } catch (error) {
       console.warn("[Database] Failed to connect:", error);
       _db = null;
