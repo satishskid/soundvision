@@ -3,6 +3,7 @@ import type { Express, Request, Response } from "express";
 import * as db from "../db";
 import { getSessionCookieOptions } from "./cookies";
 import { sdk } from "./sdk";
+import { nanoid } from "nanoid";
 
 function getQueryParam(req: Request, key: string): string | undefined {
   const value = req.query[key];
@@ -48,6 +49,40 @@ export function registerOAuthRoutes(app: Express) {
     } catch (error) {
       console.error("[OAuth] Callback failed", error);
       res.status(500).json({ error: "OAuth callback failed" });
+    }
+  });
+
+  // Demo login endpoint (for testing without OAuth)
+  app.post("/api/auth/demo-login", async (req: Request, res: Response) => {
+    try {
+      // Create a demo user
+      const userId = "demo-user-" + nanoid(10);
+      const user = {
+        id: userId,
+        name: "Demo User",
+        email: "demo@healthscreener.local",
+        loginMethod: "demo",
+        role: "user" as const,
+        lastSignedIn: new Date(),
+      };
+
+      // Save user to database
+      await db.upsertUser(user);
+
+      // Create session token
+      const sessionToken = await sdk.createSessionToken(userId, {
+        name: user.name,
+        expiresInMs: ONE_YEAR_MS,
+      });
+
+      // Set cookie
+      const cookieOptions = getSessionCookieOptions(req);
+      res.cookie(COOKIE_NAME, sessionToken, { ...cookieOptions, maxAge: ONE_YEAR_MS });
+
+      res.json({ success: true, user });
+    } catch (error) {
+      console.error("[Demo Auth] Login failed", error);
+      res.status(500).json({ error: "Demo login failed" });
     }
   });
 }

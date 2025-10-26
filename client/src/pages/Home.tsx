@@ -40,12 +40,26 @@ export default function Home() {
                 </Link>
                 <Button 
                   size="sm" 
-                  onClick={() => {
+                  onClick={async () => {
                     const loginUrl = getLoginUrl();
                     if (loginUrl !== '#') {
                       window.location.href = loginUrl;
                     } else {
-                      alert('Authentication is not configured. Please contact the administrator.');
+                      // Use demo login
+                      try {
+                        const response = await fetch('/api/auth/demo-login', {
+                          method: 'POST',
+                          headers: { 'Content-Type': 'application/json' },
+                        });
+                        if (response.ok) {
+                          window.location.reload();
+                        } else {
+                          alert('Login failed. Please try again.');
+                        }
+                      } catch (error) {
+                        console.error('Demo login failed:', error);
+                        alert('Login failed. Please try again.');
+                      }
                     }
                   }}
                 >
@@ -247,12 +261,26 @@ export default function Home() {
               </p>
               <Button 
                 size="lg" 
-                onClick={() => {
+                onClick={async () => {
                   const loginUrl = getLoginUrl();
                   if (loginUrl !== '#') {
                     window.location.href = loginUrl;
                   } else {
-                    alert('Authentication is not configured. Please contact the administrator.');
+                    // Use demo login
+                    try {
+                      const response = await fetch('/api/auth/demo-login', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                      });
+                      if (response.ok) {
+                        window.location.reload();
+                      } else {
+                        alert('Login failed. Please try again.');
+                      }
+                    } catch (error) {
+                      console.error('Demo login failed:', error);
+                      alert('Login failed. Please try again.');
+                    }
                   }
                 }}
                 className="bg-primary hover:bg-primary/90"
