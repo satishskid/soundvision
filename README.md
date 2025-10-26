@@ -8,15 +8,25 @@ Health Screener PWA brings preliminary vision and hearing screening directly to 
 
 ### Key Features
 
-- **Vision Screening**
+- **Vision Screening** 👁️
   - Photoscreening: Red reflex and eye alignment detection using device camera
   - Visual Acuity Test: Snellen-style chart reading for distance vision assessment
   - Results in 5-10 minutes
 
-- **Hearing Screening**
+- **Hearing Screening** 👂
   - Pure Tone Audiometry: Hearing thresholds at 6 frequencies (250-8000 Hz)
   - Speech-in-Noise Test: Real-world listening ability evaluation
   - Results in 8-12 minutes
+
+- **rPPG Cardiovascular Monitoring** 💓 **NEW!**
+  - Heart Rate: Real-time BPM measurement (40-200 BPM)
+  - Heart Rate Variability (HRV): SDNN, RMSSD, pNN50 metrics
+  - Stress Level: AI-powered stress assessment
+  - Blood Oxygen (SpO2): Non-invasive oxygen saturation estimation
+  - Blood Pressure: Systolic/Diastolic estimation using PTT method
+  - Respiratory Rate: Breaths per minute detection
+  - Health Score: Overall cardiovascular health assessment
+  - Results in 30-60 seconds using just your camera!
 
 - **User Management**
   - Email-based whitelisting with subscription tiers
@@ -43,9 +53,15 @@ Health Screener PWA brings preliminary vision and hearing screening directly to 
 ### Backend
 - **Express.js** with TypeScript
 - **tRPC** for type-safe API
-- **MySQL** database with Drizzle ORM
+- **Turso (libSQL)** database with Drizzle ORM
 - **OAuth** for secure authentication
 - **JWT** for session management
+
+### rPPG Algorithms
+- **TensorFlow.js** for face detection
+- **MediaPipe FaceMesh** for ROI selection
+- **Custom DSP** for signal processing (FFT, filtering, peak detection)
+- **Medical-grade algorithms** for vital signs extraction
 
 ### Infrastructure
 - Progressive Web App with service worker
@@ -57,8 +73,8 @@ Health Screener PWA brings preliminary vision and hearing screening directly to 
 ### Prerequisites
 
 - Node.js 18+ and pnpm
-- MySQL database
-- OAuth server credentials
+- Turso database (free tier available)
+- OAuth server credentials (optional for demo mode)
 
 ### Installation
 
@@ -181,17 +197,20 @@ health-screener-pwa/
 
 ## 🌐 Deployment
 
-The application can be deployed to any Node.js hosting platform:
+**See `DEPLOY_TOMORROW_GUIDE.md` for complete deployment instructions.**
 
-1. Set up MySQL database
-2. Configure environment variables
-3. Run database migrations
-4. Build and start the application
+### Recommended: Render.com (100% Free)
 
-Recommended platforms:
-- Vercel (frontend)
-- Railway/Render (backend + database)
-- AWS/GCP/Azure (full stack)
+1. Push code to GitHub
+2. Connect to Render.com
+3. Configure environment variables
+4. Deploy in 5 minutes!
+
+**Alternative platforms**:
+- **Render.com** - ✅ Free tier, perfect for Express apps
+- **Fly.io** - ✅ Free tier, no cold starts
+- **Koyeb** - ✅ Free tier, simple deployment
+- **Railway** - Paid ($5/month), best performance
 
 ## 📈 Business Model
 
